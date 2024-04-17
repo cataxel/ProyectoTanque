@@ -12,6 +12,7 @@ Logs/
 # ===================================== #
 ExportedObj/
 .vscode/
+.vsconfig
 .vs/
 /*.userprefs
 /*.csproj
