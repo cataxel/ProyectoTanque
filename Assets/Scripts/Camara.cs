@@ -3,55 +3,101 @@ using UnityEngine.UI;
 
 public class Camara : MonoBehaviour
 {
-    // Mostrar video de webcam a la camara de unity
-    RawImage rawImage;
-    WebCamTexture webCamTexture;
+	RawImage rawImage;
+	WebCamTexture webCamTexture;
 
-    // Referencias a los objetos de imagen de la UI que forman el retículo
-    public Image reticlePart1;
-    public Image reticlePart2;
+	// Variable para controlar si el zoom está activado o desactivado
+	bool isZoomed = false;
 
-    void Start()
-    {
-        rawImage = GetComponent<RawImage>();
-        webCamTexture = new WebCamTexture();
+	// Tamaño de zoom
+	Vector2 zoomedSize;
 
-        // Ajustar el tamaño del RawImage para que coincida con el tamaño de la WebCamTexture
-        rawImage.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+	// Textura para la máscara circular
+	Texture2D circleMaskTexture;
 
-        // Invertir la imagen (efecto espejo)
-        rawImage.rectTransform.localScale = new Vector3(-1, 1, 1);
+	void Start()
+	{
+		rawImage = GetComponent<RawImage>();
+		webCamTexture = new WebCamTexture();
 
-        rawImage.texture = webCamTexture;
-        webCamTexture.Play();
-        // Rotar reticlePart2 90 grados en el eje Z para crear una cruz
-        reticlePart2.rectTransform.rotation = Quaternion.Euler(0, 0, 90);
-    }
+		rawImage.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+		rawImage.rectTransform.localScale = new Vector3(-1, 1, 1);
 
-    void Update()
-    {
-        // Ajustar el tamaño y la posición del retículo en función del tamaño de la pantalla
-        Vector2 reticleSize = new Vector2(Screen.width/5, Screen.height/5);
+		rawImage.texture = webCamTexture;
+		webCamTexture.Play();
 
-        reticlePart1.rectTransform.sizeDelta = reticleSize;
+		// Inicializa el tamaño de zoom
+		zoomedSize = new Vector2(Screen.width * 1.5f, Screen.height * 1.5f);
 
-        reticlePart2.rectTransform.sizeDelta = reticleSize;
-        // Aquí puedes mostrar u ocultar tu retículo según sea necesario
-        // Por ejemplo, puedes mostrar el retículo solo cuando el botón derecho del ratón esté presionado:
-        if (Input.GetMouseButton(1))
-        {
-            ShowReticle(true);
-        }
-        else
-        {
-            ShowReticle(false);
-        }
-    }
+		// Crea una textura circular para recortar la imagen
+		circleMaskTexture = CreateCircleMaskTexture(Screen.width, Screen.height);
+	}
 
-    void ShowReticle(bool show)
-    {
-        // Mostrar u ocultar cada parte del retículo
-        reticlePart1.enabled = show;
-        reticlePart2.enabled = show;
-    }
+	void Update()
+	{
+		// Verificar si se ha hecho clic con el botón derecho del mouse
+		if (Input.GetMouseButtonDown(1))
+		{
+			ToggleZoom();
+		}
+	}
+
+	void ToggleZoom()
+	{
+		// Cambiar el estado del zoom
+		isZoomed = !isZoomed;
+
+		// Aplicar zoom si está activado
+		if (isZoomed)
+		{
+			// Modificar el tamaño del RawImage para simular el zoom
+			rawImage.rectTransform.sizeDelta = zoomedSize;
+		}
+		else
+		{
+			// Restaurar el tamaño original
+			rawImage.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+		}
+	}
+
+	// Función para crear una textura circular para recortar la imagen
+	Texture2D CreateCircleMaskTexture(int width, int height)
+	{
+		Texture2D texture = new Texture2D(width, height);
+		Color[] colors = new Color[width * height];
+
+		float centerX = width / 2f;
+		float centerY = height / 2f;
+		float radius = Mathf.Min(centerX, centerY);
+
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				float distance = Mathf.Sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY));
+				if (distance <= radius)
+				{
+					colors[y * width + x] = Color.clear; // Hace transparente el círculo interior
+				}
+				else
+				{
+					colors[y * width + x] = Color.black; // Hace negro el área exterior
+				}
+			}
+		}
+
+		texture.SetPixels(colors);
+		texture.Apply();
+
+		return texture;
+	}
+
+	void OnGUI()
+	{
+		// Dibuja la máscara circular solo cuando el zoom está activado
+		if (isZoomed)
+		{
+			GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), circleMaskTexture, ScaleMode.StretchToFill);
+		}
+	}
 }
