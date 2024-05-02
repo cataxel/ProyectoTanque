@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -221,8 +221,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 842bd4297cbfa554bbba37a6adfcf7c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reticlePart1: {fileID: 1223574996}
-  reticlePart2: {fileID: 833261680}
   h0: {fileID: 996206254}
   h1: {fileID: 621946119}
   h2: {fileID: 673368186}
@@ -244,6 +242,7 @@ GameObject:
   - component: {fileID: 119252140}
   - component: {fileID: 119252139}
   - component: {fileID: 119252138}
+  - component: {fileID: 119252142}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -347,6 +346,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &119252142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119252136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9582cd7111c7c5c0977df90c7048901, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deviceDiscover: {fileID: 963194229}
 --- !u!1 &130671023
 GameObject:
   m_ObjectHideFlags: 0
@@ -977,6 +989,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1058,6 +1071,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 601c58a84069c7422a0fce01255a511d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  esp8266Path: /check-esp8266
 --- !u!1 &996206252
 GameObject:
   m_ObjectHideFlags: 0
