@@ -1,46 +1,48 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Net;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine.Networking;
 
+/// <summary>
+/// Clase DeviceDiscover para descubrir y manejar la conexión con el módulo WiFi ESP8266.
+/// </summary>
 public class DeviceDiscover : MonoBehaviour
 {
+    // Instancia de la clase conectionArduino para manejar la conexión con el módulo WiFi ESP8266
     private conectionArduino conectionArduino;
+    // Ruta para verificar la presencia del módulo ESP8266
     public string esp8266Path = "/check-esp8266";
-    private string ipAdress = "192.168.101.110";
-    // Start is called before the first frame update
+    // Dirección IP del módulo ESP8266
+    private string ipAdress = "192.168.101.25";
+
+    /// <summary>
+    /// Método Start que se llama antes de la primera actualización del frame.
+    /// </summary>
     void Start()
     {
         string ipAddress = GetLocalIPAddress();
         Debug.Log("Direccion IP local: "+ipAddress);
-        //StartCoroutine(ScanForESP8266(ipAddress));
         StartCoroutine(CheckDevice(ipAdress));
     }
 
+    /// <summary>
+    /// Método GetLocalIPAddress para obtener la dirección IP local del dispositivo.
+    /// </summary>
+    /// <returns>La dirección IP local del dispositivo.</returns>
     string GetLocalIPAddress()
     {
         string ipAddress = "";
 
-        // Obtener todas las interfaces de red disponibles
         NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
         foreach (NetworkInterface intf in interfaces)
         {
-            // Filtrar las interfaces que estén conectadas y sean de tipo Ethernet o Wi-Fi
             if (intf.OperationalStatus == OperationalStatus.Up &&
                  intf.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
             {
-                // Obtener las direcciones IP asociadas con esta interfaz
                 IPInterfaceProperties ipProps = intf.GetIPProperties();
                 foreach (UnicastIPAddressInformation addr in ipProps.UnicastAddresses)
                 {
-                    // Filtrar las direcciones IPv4 y obtener la dirección IP
                     if (addr.Address.AddressFamily == AddressFamily.InterNetwork)
                     {
                         ipAddress = addr.Address.ToString();
@@ -53,48 +55,10 @@ public class DeviceDiscover : MonoBehaviour
         return ipAddress;
     }
 
-    IEnumerator ScanForESP8266(string baseIpAddress)
-    {
-        int timeout = 100;
-
-        if (string.IsNullOrEmpty(baseIpAddress))
-        {
-            Debug.LogError("No se pudo obtener la dirección IP local.");
-            yield break; // Salir de la función si no se puede obtener la dirección IP local
-        }
-
-        // Obtener los componentes de la dirección IP base
-        string[] ipParts = baseIpAddress.Split('.');
-        if (ipParts.Length != 4)
-        {
-            Debug.LogError("La dirección IP base no es válida.");
-            yield break; // Salir de la función si la dirección IP base no es válida
-        }
-
-        // Obtener la parte de la red (los primeros tres octetos)
-        string networkPart = string.Join(".", ipParts.Take(3));
-
-        new Thread(() =>
-        {
-            Parallel.For(1, 255, i =>
-            {
-                Debug.Log("Escaneando dirección IP: " + networkPart + "." + i + "...");
-                string ipAddress = $"{networkPart}.{i}";
-
-                System.Net.NetworkInformation.Ping pingSender = new System.Net.NetworkInformation.Ping();
-                pingSender.PingCompleted += (sender, e) => PingCompletedCallback(sender, e, ipAddress);
-                pingSender.SendAsync(ipAddress, timeout, null);
-            });
-        }).Start();
-    }
-     private void PingCompletedCallback(object sender, PingCompletedEventArgs e, string ipAddress)
-    {
-        if (e.Reply.Status == IPStatus.Success)
-        {
-            StartCoroutine(CheckDevice(ipAddress));
-        }
-    }
-
+    /// <summary>
+    /// Método CheckDevice para verificar la presencia del módulo ESP8266 en la dirección IP especificada.
+    /// </summary>
+    /// <param name="ipAddress">La dirección IP donde se verificará la presencia del módulo ESP8266.</param>
     IEnumerator CheckDevice(string ipAddress)
     {
         string url = "http://" + ipAddress + esp8266Path;
@@ -106,29 +70,30 @@ public class DeviceDiscover : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                // El dispositivo en la dirección IP especificada es un módulo ESP8266
                 Debug.Log("Encontrado ESP8266 en: " + ipAddress);
-                // Puedes realizar cualquier acción adicional que necesites aquí, como conectarte al dispositivo
                 conectionArduino = new conectionArduino();
-
-                // Conéctate al módulo WiFi ESP8266
                 conectionArduino.Connect(ipAddress, 80);
-                // mensaje de coneccion exitosa
                 Debug.Log("Conectado a " + ipAddress);
             }
             else
             {
-                // No se pudo conectar al dispositivo en la dirección IP especificada
                 Debug.Log("No se pudo conectar a " + ipAddress + ": " + www.error);
             }
         }
     }
+
+    /// <summary>
+    /// Método OnApplicationQuit para manejar el cierre de la aplicación.
+    /// </summary>
     void OnApplicationQuit()
     {
-        // Cierra la conexión cuando la aplicación se cierra
         conectionArduino.CloseConnection();
     }
 
+    /// <summary>
+    /// Método SendData para enviar datos al módulo WiFi ESP8266.
+    /// </summary>
+    /// <param name="s">Los datos que se enviarán al módulo WiFi ESP8266.</param>
     public void SendData(string s)
     {
         if (conectionArduino != null)
