@@ -33,5 +33,14 @@ public class Movimiento : MonoBehaviour
             // mandar el comando al modulo wifi
             deviceDiscover.SendData("S");            
         }
+        // Obtén el movimiento del mouse
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
+
+        // Convierte los valores a una cadena de texto
+        string mouseMovement = mouseX.ToString() + "," + mouseY.ToString();
+
+        // Envía la cadena de texto al Arduino
+        //deviceDiscover.SendData(mouseMovement);
     }
 }
