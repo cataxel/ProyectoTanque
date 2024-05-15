@@ -61,6 +61,7 @@ public class DeviceDiscover : MonoBehaviour
     /// <param name="ipAddress">La dirección IP donde se verificará la presencia del módulo ESP8266.</param>
     IEnumerator CheckDevice(string ipAddress)
     {
+        Debug.Log(ipAddress);
         string url = "http://" + ipAddress + esp8266Path;
 
         using (UnityWebRequest www = UnityWebRequest.Get(url))

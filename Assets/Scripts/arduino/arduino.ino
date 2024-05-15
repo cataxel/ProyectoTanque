@@ -1,43 +1,31 @@
+#include <AFMotor.h>
 
-// ping del motor derecho
-int motorRightPing1 = 11;
-int motorRightPing2 = 10;
-int ping = 22;
-// ping del motor izquierdo
-int motorLeftPing = 3;
-
-
+// Inicializa el motor en el puerto M1 de la placa L293D Motor Shield
+AF_DCMotor motor(1);
 
 void setup() {
-  // Inicia la comunicación serie a una velocidad de 9600 baudios
+  // Inicia la comunicación serie en el puerto Serial1 a una velocidad de 9600 baudios
+  Serial1.begin(9600);
   Serial.begin(9600);
-  pinMode(motorRightPing1, OUTPUT);
-  pinMode(motorRightPing2, OUTPUT);
-  pinMode(ping,OUTPUT);
 }
 
 void loop() {
-  // Comprueba si hay datos disponibles para leer
-  if (Serial.available() > 0) {
-    // Lee la cadena de texto desde el puerto serie
-    String mouseMovement = Serial.readStringUntil('\n');
+  // Comprueba si hay datos disponibles para leer en el puerto Serial1
+  if (Serial1.available() > 0) {
+    // Lee el dato del puerto serie
+    char command = Serial1.read();
+    Serial.println(command);
 
-    // Separa la cadena de texto en los valores de X e Y
-    int commaIndex = mouseMovement.indexOf(',');
-    String mouseX = mouseMovement.substring(0, commaIndex);
-    String mouseY = mouseMovement.substring(commaIndex + 1);
-
-    // Convierte los valores de X e Y a números
-    float x = mouseX.toFloat();
-    float y = mouseY.toFloat();
-
-    // Usa los valores de X e Y para controlar los motores
-
-    // si el serial es 'W' avanza hacia adelante
-    if (mouseMovement == "W") {
-      //activar el motor
-      digitalWrite(motorRightPing1, HIGH);
-      digitalWrite(motorRightPing2, HIGH);
+    // Comprueba el comando recibido y controla el motor en consecuencia
+    switch (command) {
+      case 'W': // Avanza
+        motor.setSpeed(255); // Velocidad máxima
+        motor.run(FORWARD); // Avanza
+        break;
+      case 'S': // Retrocede
+        motor.setSpeed(255); // Velocidad máxima
+        motor.run(BACKWARD); // Retrocede
+        break;
     }
   }
 }

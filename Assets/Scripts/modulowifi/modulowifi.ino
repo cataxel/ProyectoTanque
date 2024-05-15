@@ -1,4 +1,5 @@
 #include <WiFi.h>
+#include <HardwareSerial.h>
 
 // Nombre de la red WiFi a la que se conectará el ESP32
 const char* ssid = "ALUMNOSEDX";
@@ -49,6 +50,9 @@ void loop() {
         // Imprime el byte leído en el puerto serie
         Serial.write(c);
         Serial.println("\n");
+
+        // Envía el byte leído al Arduino
+        Serial.write(c);
 
         // Si el byte es un carácter de nueva línea,
         if (c == '\n') {
