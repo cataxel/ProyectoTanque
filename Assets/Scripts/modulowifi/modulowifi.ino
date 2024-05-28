@@ -52,7 +52,7 @@ void loop() {
         Serial.println("\n");
 
         // Envía el byte leído al Arduino
-        Serial.write(c);
+        //Serial.write(c);
 
         // Si el byte es un carácter de nueva línea,
         if (c == '\n') {

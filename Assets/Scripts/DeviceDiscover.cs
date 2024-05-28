@@ -79,6 +79,7 @@ public class DeviceDiscover : MonoBehaviour
             else
             {
                 Debug.Log("No se pudo conectar a " + ipAddress + ": " + www.error);
+                Start();
             }
         }
     }
