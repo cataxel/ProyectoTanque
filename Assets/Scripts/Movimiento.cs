@@ -50,6 +50,18 @@ public class Movimiento : MonoBehaviour
             // mandar el comando al modulo wifi
             deviceDiscover.SendData("W");
         }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            // mandar el comando al modulo wifi
+            deviceDiscover.SendData("Q");
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            // mandar el comando al modulo wifi
+            deviceDiscover.SendData("E");
+        }
+
+
 
         // mover hacia abajo
         if (Input.GetKeyDown(KeyCode.S))

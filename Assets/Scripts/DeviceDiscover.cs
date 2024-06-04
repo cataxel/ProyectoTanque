@@ -14,7 +14,7 @@ public class DeviceDiscover : MonoBehaviour
     // Ruta para verificar la presencia del módulo ESP8266
     public string esp8266Path = "/check-esp8266";
     // Dirección IP del módulo ESP8266
-    private string ipAdress = "192.168.101.25";
+    private string ipAdress = "192.168.1.148";
 
     /// <summary>
     /// Método Start que se llama antes de la primera actualización del frame.

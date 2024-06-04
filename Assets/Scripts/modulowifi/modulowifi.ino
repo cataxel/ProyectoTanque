@@ -2,9 +2,9 @@
 #include <HardwareSerial.h>
 
 // Nombre de la red WiFi a la que se conectará el ESP32
-const char* ssid = "ALUMNOSEDX";
+const char* ssid = "Tanquesito";
 // Contraseña de la red WiFi a la que se conectará el ESP32
-const char* password = "TNMjiqA2024:>!";
+const char* password = "Tanquesito3829";
 
 // Crea un servidor WiFi que se ejecutará en el puerto 80
 WiFiServer server(80);
