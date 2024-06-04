@@ -71,15 +71,15 @@ void loop() {
           break;
         case 'A': // Gira a la izquierda
           motor1.setSpeed(100); // Velocidad máxima
-          motor1.run(FORWARD); // Avanza
+          motor1.run(BACKWARD); // Avanza
           motor2.setSpeed(255); // Velocidad máxima
-          motor2.run(FORWARD); // Avanza
+          motor2.run(BACKWARD); // Avanza
           break;
         case 'D': // Gira a la derecha
           motor1.setSpeed(255); // Velocidad máxima
-          motor1.run(FORWARD); // Avanza
+          motor1.run(BACKWARD); // Avanza
           motor2.setSpeed(100); // Velocidad máxima
-          motor2.run(FORWARD); // Avanza
+          motor2.run(BACKWARD); // Avanza
           break;
         case 'Q': // Gira a la derecha
           motor1.setSpeed(200); // Velocidad máxima

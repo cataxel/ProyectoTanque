@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 /// <summary>
 /// Clase DeviceDiscover para descubrir y manejar la conexión con el módulo WiFi ESP8266.
@@ -24,6 +25,7 @@ public class DeviceDiscover : MonoBehaviour
         string ipAddress = GetLocalIPAddress();
         Debug.Log("Direccion IP local: "+ipAddress);
         StartCoroutine(CheckDevice(ipAdress));
+		//textoIp = GameObject.Find("Text").GetComponent<TextMesh>();
     }
 
     /// <summary>
@@ -75,6 +77,8 @@ public class DeviceDiscover : MonoBehaviour
                 conectionArduino = new conectionArduino();
                 conectionArduino.Connect(ipAddress, 80);
                 Debug.Log("Conectado a " + ipAddress);
+				// imprimir la Ip en el texto
+				//textoIp.text = "IP: "+ipAddress;
             }
             else
             {
@@ -102,6 +106,7 @@ public class DeviceDiscover : MonoBehaviour
         {
             conectionArduino.SendData(s);
             Debug.Log(s);
+			//textoIp.text = s;
         }
     }
 }

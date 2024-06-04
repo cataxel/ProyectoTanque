@@ -1,14 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Movimiento : MonoBehaviour
 {
     public DeviceDiscover deviceDiscover;
     private Vector3 lastMousePosition;
+    
+    public Button ButtonStop,ButtonW,ButtonA,ButtonS,ButtonD,ButtonQ,ButtonE,ButtonU,ButtonJ,Button0;
 
+	 void Start()
+    {
+        ButtonA.onClick.AddListener(() => deviceDiscover.SendData("A"));
+        ButtonD.onClick.AddListener(() => deviceDiscover.SendData("D"));
+        ButtonW.onClick.AddListener(() => deviceDiscover.SendData("W"));
+        ButtonQ.onClick.AddListener(() => deviceDiscover.SendData("Q"));
+        ButtonE.onClick.AddListener(() => deviceDiscover.SendData("E"));
+        ButtonS.onClick.AddListener(() => deviceDiscover.SendData("S"));
+        ButtonStop.onClick.AddListener(() => deviceDiscover.SendData("P"));
+        ButtonU.onClick.AddListener(() => deviceDiscover.SendData("U"));
+        ButtonJ.onClick.AddListener(() => deviceDiscover.SendData("J"));
+        Button0.onClick.AddListener(() => deviceDiscover.SendData("0"));
+    }
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {
         // Si se presiona la tecla ESC
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -60,9 +76,6 @@ public class Movimiento : MonoBehaviour
             // mandar el comando al modulo wifi
             deviceDiscover.SendData("E");
         }
-
-
-
         // mover hacia abajo
         if (Input.GetKeyDown(KeyCode.S))
         {
@@ -91,25 +104,5 @@ public class Movimiento : MonoBehaviour
             // mandar el comando al modulo wifi
             deviceDiscover.SendData("0");
         }
-
-        // Obtén la posición actual del mouse
-        Vector3 mousePosition = Input.mousePosition;
-
-        // Si la posición del mouse ha cambiado
-        if (mousePosition != lastMousePosition)
-        {
-            // Mapea la posición del mouse a un rango adecuado para los servomotores
-            //int servoX = (int)Mathf.Lerp(0, 180, mousePosition.x / Screen.width);
-            int servoY = (int)Mathf.Lerp(0, 180, mousePosition.y / Screen.height);
-
-            // Convierte los valores a una cadena de texto
-            string mouseMovement = servoY.ToString();
-
-            // Envía la cadena de texto al Arduino
-            //deviceDiscover.SendData(mouseMovement+ "\n");
-
-            // Guarda la posición actual del mouse
-            lastMousePosition = mousePosition;
-        }
-    }
+    }*/
 }
